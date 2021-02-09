@@ -32,8 +32,6 @@ info:
 send:
 	@chmod a+x ./scripts/send-message
 	@bash ./scripts/send-message bcrt1qez7p3xytd45l2h8dmta4g0s2t4z8y78qguhdlx
-	@sleep 1
-	@${alice} generatetoaddress 1 `${alice} getnewaddress` >/dev/null
 	@echo ""
 	@echo "Tip: Use the following command to get the transaction's ids entered in mempool"
 	@echo "bcli getrawmempool"
