@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# wrap Alice's bitcoin-cli command
+alice="docker exec alice bitcoin-cli -rpcuser=bitcoin -rpcpassword=bitcoin"
+
+# Fetch an utxo for Alice
+echo "Retrieve utxos..."
+txid=$(eval "$alice listunspent | jq -c '.[0].txid'")
+vout=$(eval "$alice listunspent | jq -c '.[0].vout'")
+amount=$(eval "$alice listunspent | jq -c '.[0].amount'")
+
+# craft inputs and outputs
+hex="6f63656c6f7420726f636b7321"
+inputs="[{\"txid\":$txid, \"vout\": $vout}]"
+outputs="[{\"$1\":$amount}, {\"data\":\"$hex\"}]"
+
+# create raw transaction with OP_RETURN that spends the entire input (ie. no fees)
+echo "Create..."
+unsigned=$(eval "$alice createrawtransaction '$inputs' '$outputs'")
+
+# sign transaction
+echo "Sign..."
+signed=$(eval "$alice signrawtransactionwithwallet $unsigned | jq '.hex'")
+
+# broadcast
+echo "Broadcast tx..."
+eval "$alice sendrawtransaction $signed"

@@ -1,0 +1,47 @@
+version: "3.7"
+
+services:
+  alice:
+    image: vulpemventures/bitcoin:latest
+    container_name: alice
+    ports:
+      - 8333:8333
+      - 8332:8332
+    command:
+      - -regtest
+      - -port=8333
+      - -rpcport=8332
+      - -rpcuser=bitcoin
+      - -rpcpassword=bitcoin
+      - -minrelaytxfee=0
+  bob:
+    image: vulpemventures/bitcoin:latest
+    container_name: bob
+    depends_on:
+      - alice
+    ports:
+      - 18333:8333
+      - 18332:8332
+    command:
+      - -regtest
+      - -port=8333
+      - -rpcport=8332
+      - -rpcuser=bitcoin
+      - -rpcpassword=bitcoin
+      - -connect=alice:8333
+      - -minrelaytxfee=0
+  charlie:
+    image: vulpemventures/bitcoin:latest
+    container_name: charlie
+    depends_on:
+      - alice
+    ports:
+      - 28333:8333
+      - 28332:8332
+    command:
+      - -regtest
+      - -port=8333
+      - -rpcport=8332
+      - -rpcuser=bitcoin
+      - -rpcpassword=bitcoin
+      - -connect=alice:8333
