@@ -25,7 +25,7 @@ Bitcoin Core 0.12 will have a strict maximum size on the mempool. The default va
 This will start-up three nodes, Alice and Bob patched with `-minrelaytxfee=0` and `Charlie` unpatched
 
 ```sh
-$ docker-compose up
+$ make up
 ```
 
 ## Send a message 
@@ -48,5 +48,5 @@ $ make info
 ## Tear down
 
 ```sh
-$ docker-compose down
+$ make down
 ```
